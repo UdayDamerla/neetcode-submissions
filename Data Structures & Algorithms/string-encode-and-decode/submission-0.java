@@ -1,43 +1,27 @@
-public class Solution {
+class Solution {
 
     public String encode(List<String> strs) {
-        if (strs.isEmpty()) return "";
-        StringBuilder res = new StringBuilder();
-        List<Integer> sizes = new ArrayList<>();
-        for (String str : strs) {
-            sizes.add(str.length());
+        StringBuilder sb = new StringBuilder();
+        for (String s : strs) {
+            sb.append(s.length()).append("#").append(s);
         }
-        for (int size : sizes) {
-            res.append(size).append(',');
-        }
-        res.append('#');
-        for (String str : strs) {
-            res.append(str);
-        }
-        return res.toString();
+        return sb.toString();
     }
 
     public List<String> decode(String str) {
-        if (str.length() == 0) {
-            return new ArrayList<>();
-        }
-        List<String> res = new ArrayList<>();
-        List<Integer> sizes = new ArrayList<>();
+        List<String> result = new ArrayList<>();
         int i = 0;
-        while (str.charAt(i) != '#') {
-            StringBuilder cur = new StringBuilder();
-            while (str.charAt(i) != ',') {
-                cur.append(str.charAt(i));
-                i++;
+
+        while (i < str.length()) {
+            int j = i;
+            while (str.charAt(j) != '#') {
+                j++;
             }
-            sizes.add(Integer.parseInt(cur.toString()));
-            i++;
+            int len = Integer.parseInt(str.substring(i, j));
+            j++; // skip '#'
+            result.add(str.substring(j, j + len));
+            i = j + len;
         }
-        i++;
-        for (int sz : sizes) {
-            res.add(str.substring(i, i + sz));
-            i += sz;
-        }
-        return res;
+        return result;
     }
 }
